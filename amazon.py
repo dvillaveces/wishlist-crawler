@@ -1,21 +1,16 @@
 import time
+#import urllib
+import bs4
+import requests
 
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
-
+# Initialize starting url
 wish_list_url = "https://www.amazon.com/gp/registry/wishlist/28Q24IH2QSNHU/"
 
-browser = webdriver.Chrome()
+# load url into soup object
+response = requests.get(wish_list_url)
+time.sleep(1)
+html = response.content
+soup = bs4.BeautifulSoup(html, "html.parser")
 
-browser.get(wish_list_url)
-#time.sleep(1)
-
-elems = browser.find_elements(By.CSS_SELECTOR, "a[id^='itemName']")
-prices = browser.find_elements(By.CSS_SELECTOR, "span[id^='itemPrice']")
-
-
-for elem in elems:
-    print(elem.text)
-for price in prices:
-    print(price.text)
+# Scrape lek from current website
+lek = soup.find(id="sort-by-price-next-batch-lek")['value']
