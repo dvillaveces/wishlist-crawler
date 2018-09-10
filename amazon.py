@@ -10,10 +10,13 @@ url = "https://www.amazon.com/gp/registry/wishlist/28Q24IH2QSNHU/"
 def load_soup(url):
     response = requests.get(url)
     print(response.status_code)
-    time.sleep(1)
-    html = response.content
-    soup = bs4.BeautifulSoup(html, "html.parser")
-    return soup
+    if response.status_code == 200:
+        time.sleep(1.5)
+        html = response.content
+        soup = bs4.BeautifulSoup(html, "html.parser")
+        return soup
+    else:
+        return load_soup(url)
 
 def get_next_url(soup):
     # Scrape lek from current website
